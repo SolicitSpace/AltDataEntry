@@ -1,7 +1,6 @@
 
 function generateGrid(rawTableData) {
 
-	console.log(rawTableData)
 
 	// return;
 	// no. of columns
@@ -73,8 +72,13 @@ function generateGrid(rawTableData) {
 
 
 
-
+/*
+|-----------------------------------------------------------------------------------
+|	Craeting the add row section (textbox + button)
+|-----------------------------------------------------------------------------------
+*/
 function createAddRowBtn (noOfFields, rawTableData, table) {
+
 
 	// creating table.
 	let addSection_table = document.createElement('table');
@@ -95,12 +99,16 @@ function createAddRowBtn (noOfFields, rawTableData, table) {
 			numRows.max = 10;
 			numRows.className = "data-input-fields";
 			numRows.id = '1';
-			numRows.onkeyup = function() {
-				// Need to plug validations.
-				if (this.value < 11) {
-
-				} else {
-					alert("Only 10 rows can be added at once.");
+			numRows.value = 1;
+			numRows.onkeyup = function() {console.log("|" + this.value + "|")
+				
+				// Min-Max length validation. 
+				if (this.value <= 0) {
+					alert("Value must be greater than 0!");
+					numRows.value = 10;
+				} 
+				else if (this.value > 10) {
+					alert("Value must be less than 10!");
 					numRows.value = 10;
 				}
 
@@ -192,10 +200,9 @@ function generateGridHeaders_helper (i, rawTableData, table, table_header_row) {
 |----------------------------------------------------------------------------------------
 */
 function generateGridBody_helper(noOfFields, rawTableData, table, numRows) {
-	// return;
 
-
-	// rows
+	// Creating rows and column for grid's body.
+	// Creating Rows
 	for (let i=0; i<numRows; i++) { 
 
 		// create new row
@@ -206,15 +213,16 @@ function generateGridBody_helper(noOfFields, rawTableData, table, numRows) {
 		let fieldName = document.createElement('td');
 		fieldName.className = 'field-name';
 		let headerFieldName = document.createElement('p');
-		headerFieldName.innerHTML = i + 1;
+		headerFieldName.innerHTML = table.rows.length;   // srno will be updated w.r.t table's length
 		fieldName.appendChild(headerFieldName);
 		table_body_row.appendChild(fieldName);			// appending the data cells to the row.
 
 
-	// appending the data row to the table.
-	table.appendChild(table_body_row);
+		// appending the data row to the table.
+		table.appendChild(table_body_row);
 
 
+		// Creating Columns
 		for (let j=0; j<noOfFields; j++) { 
 		
 				// generateGridBody_helper(i, rawTableData, table, table_body_row);
