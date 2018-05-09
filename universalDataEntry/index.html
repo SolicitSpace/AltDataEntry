@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Universal Data entry</title>
+
+	<link rel="stylesheet" type="text/css" href="../styles/universalDataEntry.css">
+
+</head>
+<body>
+
+	<div id="container">
+		<table id="main-table">
+			<thead>
+				<tr>
+					<td>
+						<p class='center placeholders'>
+							<span class="steps-style">Step 1.</span> Select from List of DB's
+						</p>
+					</td>
+					<td>
+						<p class='center placeholders'>
+							<span class="steps-style">Step 2.</span> Select the Table from selected DB
+						</p>
+					</td>
+					<td>
+						<p class='center placeholders'>
+							<span class="steps-style">Step 3.</span> Go to form page button
+						</p>
+					</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td id="db-list-section" class="center scrollable"></td>
+
+					<td id="tables-list-section" class="center scrollable"></td>
+
+					<td id="confirm-selection-section" class="center scrollable">
+						<button id="go-to-form-btn" onclick="rtGeneratedFormPage()" disabled="true">Form based Data Entry</button> <br /> <br />
+						<button id="go-to-form-btn" onclick="rtGeneratedFormPage()" disabled="true">Grid based Data Entry</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	
+</body>
+
+<script type="text/javascript" src="../scripts/js/declareVariables.js"></script>
+<script type="text/javascript" src="../scripts/js/getDBList.js"></script>
+<script type="text/javascript" src="../scripts/js/displayTableData.js"></script>
+</html>
