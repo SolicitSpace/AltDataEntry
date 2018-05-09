@@ -164,7 +164,8 @@ function onTableItemSelected(tableSelected, tableList) {
 
 	// getTableListFor(tableList.innerHTML)
 
-	document.getElementById('go-to-form-btn').disabled = false;
+	document.getElementsByClassName('operation-btns')[0].disabled = false;
+	document.getElementsByClassName('operation-btns')[1].disabled = false;
 }
 
 
@@ -178,7 +179,7 @@ function onTableItemSelected(tableSelected, tableList) {
 
 
 
-// Redirecting to generated form page.
+// Redirecting to form based page.
 function rtGeneratedFormPage() {
 
 
@@ -187,6 +188,21 @@ function rtGeneratedFormPage() {
 	window.localStorage.tableName = currSelectedTable;
 
 
-	window.location.href = "generatedForm/";
+	window.location.href = "formBased/";
+
+}
+
+
+
+// Redirecting to grid based page.
+function rtGeneratedGridPage() {
+
+
+	// saving stuff in localstorage or session
+	window.localStorage.dbName = currSelectedDB;
+	window.localStorage.tableName = currSelectedTable;
+
+
+	window.location.href = "gridBased/";
 
 }
