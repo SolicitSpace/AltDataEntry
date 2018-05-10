@@ -20,21 +20,6 @@ function generateGrid(rawTableData) {
 
 
 
-	// Creating the table headers.
-	// loop for creating multiple fields
-	let fieldName = document.createElement('td');
-	fieldName.className = 'field-name';
-	let headerFieldName = document.createElement('p');
-	headerFieldName.innerHTML = "Sr no.";
-	fieldName.appendChild(headerFieldName);
-	table_header_row.appendChild(fieldName);			// appending the data cells to the row.
-
-
-
-
-
-	// appending the data row to the table.
-	table.appendChild(table_header_row);
 
 	for (let i=0; i<noOfFields; i++) { 
 		generateGridHeaders_helper(i, rawTableData, table, table_header_row);
@@ -48,97 +33,6 @@ function generateGrid(rawTableData) {
 	// Creating the section for adding additional rows. (5 are provided by default)
 	createAddRowBtn(noOfFields, rawTableData, table);
 
-
-
-
-
-	// // Creating a button for submit.
-	// let submitBtn = document.createElement('button');
-	// submitBtn.innerHTML = 'SUBMIT';
-	// submitBtn.onclick = function() {
-	// 	verifyData(noOfFields);
-	// }
-
-	// document.body.appendChild(submitBtn);
-
-
-	// // Creating a button for reset.
-	// let resetBtn = document.createElement('button');
-	// resetBtn.innerHTML = 'RESET';
-	// document.body.appendChild(resetBtn);
-
-}
-
-
-
-
-/*
-|-----------------------------------------------------------------------------------
-|	Craeting the add row section (textbox + button)
-|-----------------------------------------------------------------------------------
-*/
-function createAddRowBtn (noOfFields, rawTableData, table) {
-
-
-	// creating table.
-	let addSection_table = document.createElement('table');
-		
-		// creating table row.
-		let addSection_row = document.createElement('tr');
-
-		//---------------------------------------------------------------
-		// Cell #1 
-		//---------------------------------------------------------------
-		// Creating and appending add button to the datacell.
-		let addSection_data_numRows = document.createElement('td');
-
-			// Create input field to add number of fields to be added.
-			let numRows = document.createElement('input');
-			numRows.type = "number";
-			numRows.min = 1;
-			numRows.max = 10;
-			numRows.className = "data-input-fields";
-			numRows.id = '1';
-			numRows.value = 1;
-			numRows.onkeyup = function() {console.log("|" + this.value + "|")
-				
-				// Min-Max length validation. 
-				if (this.value <= 0) {
-					alert("Value must be greater than 0!");
-					numRows.value = 10;
-				} 
-				else if (this.value > 10) {
-					alert("Value must be less than 10!");
-					numRows.value = 10;
-				}
-
-			} 
-
-		addSection_data_numRows.appendChild(numRows);					// appending the elements to the data cells.
-		addSection_row.appendChild(addSection_data_numRows);			// appending the data cells to the row.
-
-
-
-		//---------------------------------------------------------------
-		// Cell #2 
-		//---------------------------------------------------------------
-		// Creating and appending add button to the datacell.
-		let addSection_data_addBtn = document.createElement('td');
-
-			// Creating the add rows button.
-			let submitBtn = document.createElement('button');
-			submitBtn.innerHTML = 'ADD';
-			submitBtn.onclick = function() {
-				// reusing the `generateGridBody_helper()` to create additional rows. 
-				generateGridBody_helper(noOfFields, rawTableData, table, numRows.value);				
-			}
-
-		addSection_data_addBtn.appendChild(submitBtn);					// appending the elements to the data cells.
-		addSection_row.appendChild(addSection_data_addBtn);				// appending the data cells to the row.
-
-
-	// appending the table to the html body.
-	document.body.appendChild(addSection_row);
 }
 
 
@@ -148,15 +42,33 @@ function createAddRowBtn (noOfFields, rawTableData, table) {
 
 
 
+function handleStickyHeader(headerRow) {
 
 
+	io = document.getElementsByTagName('th');
+	let bounding = io.getBoundingClientRect();
+
+	document.body.onscroll = function(){
+	  bounding = io.getBoundingClientRect();
+	  
+	  // Sticky Box
+	  if (bounding.y < 0) {	  	
+		  io.style.position = 'sticky';  
+		  io.style.zIndex = 100;
+		  io.style.top = 0;
+	  }
 
 
-
-
-
-
-
+	  // Unsticky Box
+	  else if (bounding.y > 10) {
+		  io.style.position = 'relative';
+		  io.style.zIndex = 0;
+		  io.style.top = '';
+		  console.log("Un-Stick it!");
+	  }
+	};
+	 
+}
 
 
 
@@ -171,6 +83,32 @@ function createAddRowBtn (noOfFields, rawTableData, table) {
 */
 function generateGridHeaders_helper (i, rawTableData, table, table_header_row) {
 
+	// Creating the sr no column. Only execute the first time.
+	if (i==0) {
+		// Creating the table headers.
+		// Just creating Srno.
+		let table_header_cell = document.createElement('th');
+		table_header_cell.className = "table-headers";
+		
+		// Used to apply the sticky header column so the header always stays at the top.
+		// handleStickyHeader(table_header_cell);
+		
+		let fieldName = document.createElement('td');
+		fieldName.className = 'field-name';
+		let headerFieldName = document.createElement('p');
+		headerFieldName.innerHTML = "Sr no.";
+		fieldName.appendChild(headerFieldName);
+		table_header_cell.appendChild(fieldName);
+		table_header_row.appendChild(table_header_cell);			// appending the data cells to the row.
+
+		// appending the data row to the table.
+		table.appendChild(table_header_row);
+
+	}
+
+
+	let table_header_cell = document.createElement('th');
+	table_header_cell.className = "table-headers";
 
 	// creating the first data cell which includes label.
 	let fieldName = document.createElement('td');
@@ -178,12 +116,13 @@ function generateGridHeaders_helper (i, rawTableData, table, table_header_row) {
 	let headerFieldName = document.createElement('p');
 	headerFieldName.innerHTML = rawTableData[i]['column_name'];
 	fieldName.appendChild(headerFieldName);
-	table_header_row.appendChild(fieldName);			// appending the data cells to the row.
+	table_header_cell.appendChild(fieldName);
+	table_header_row.appendChild(table_header_cell);			// appending the data cells to the row.
 
 
 	// appending the data row to the table.
 	table.appendChild(table_header_row);
-
+	
 }
 
 
@@ -335,6 +274,78 @@ function processMaxLength(colType) {
 
 
 
+
+
+
+
+/*
+|-----------------------------------------------------------------------------------
+|	Craeting the add row section (textbox + button)
+|-----------------------------------------------------------------------------------
+*/
+function createAddRowBtn (noOfFields, rawTableData, table) {
+
+
+	// creating table.
+	let addSection_table = document.createElement('table');
+		
+		// creating table row.
+		let addSection_row = document.createElement('tr');
+
+		//---------------------------------------------------------------
+		// Cell #1 
+		//---------------------------------------------------------------
+		// Creating and appending add button to the datacell.
+		let addSection_data_numRows = document.createElement('td');
+
+			// Create input field to add number of fields to be added.
+			let numRows = document.createElement('input');
+			numRows.type = "number";
+			numRows.min = 1;
+			numRows.max = 10;
+			numRows.className = "data-input-fields";
+			numRows.id = '1';
+			numRows.value = 1;
+			numRows.onkeyup = function() {console.log("|" + this.value + "|")
+				
+				// Min-Max length validation. 
+				if (this.value <= 0) {
+					alert("Value must be greater than 0!");
+					numRows.value = 10;
+				} 
+				else if (this.value > 10) {
+					alert("Value must be less than 10!");
+					numRows.value = 10;
+				}
+
+			} 
+
+		addSection_data_numRows.appendChild(numRows);					// appending the elements to the data cells.
+		addSection_row.appendChild(addSection_data_numRows);			// appending the data cells to the row.
+
+
+
+		//---------------------------------------------------------------
+		// Cell #2 
+		//---------------------------------------------------------------
+		// Creating and appending add button to the datacell.
+		let addSection_data_addBtn = document.createElement('td');
+
+			// Creating the add rows button.
+			let submitBtn = document.createElement('button');
+			submitBtn.innerHTML = 'ADD';
+			submitBtn.onclick = function() {
+				// reusing the `generateGridBody_helper()` to create additional rows. 
+				generateGridBody_helper(noOfFields, rawTableData, table, numRows.value);				
+			}
+
+		addSection_data_addBtn.appendChild(submitBtn);					// appending the elements to the data cells.
+		addSection_row.appendChild(addSection_data_addBtn);				// appending the data cells to the row.
+
+
+	// appending the table to the html body.
+	document.body.appendChild(addSection_row);
+}
 
 
 
