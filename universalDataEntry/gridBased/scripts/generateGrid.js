@@ -27,47 +27,12 @@ function generateGrid(rawTableData) {
 
 	
 	// now that headers are complete working on body.
-	generateGridBody_helper(noOfFields, rawTableData, table, 5)
+	generateGridBody_helper(noOfFields, rawTableData, table, 5);
 
 
 	// Creating the section for adding additional rows. (5 are provided by default)
 	createAddRowBtn(noOfFields, rawTableData, table);
 
-}
-
-
-
-
-
-
-
-
-function handleStickyHeader(headerRow) {
-
-
-	io = document.getElementsByTagName('th');
-	let bounding = io.getBoundingClientRect();
-
-	document.body.onscroll = function(){
-	  bounding = io.getBoundingClientRect();
-	  
-	  // Sticky Box
-	  if (bounding.y < 0) {	  	
-		  io.style.position = 'sticky';  
-		  io.style.zIndex = 100;
-		  io.style.top = 0;
-	  }
-
-
-	  // Unsticky Box
-	  else if (bounding.y > 10) {
-		  io.style.position = 'relative';
-		  io.style.zIndex = 0;
-		  io.style.top = '';
-		  console.log("Un-Stick it!");
-	  }
-	};
-	 
 }
 
 
@@ -110,9 +75,16 @@ function generateGridHeaders_helper (i, rawTableData, table, table_header_row) {
 	let table_header_cell = document.createElement('th');
 	table_header_cell.className = "table-headers";
 
+	// Provides info about the field. For eg. the data type and the max characters allowed.
+	table_header_cell.onclick = function () {
+		console.log(rawTableData[i]);
+		alert(processColDataType(rawTableData[i]['column_type']) + "\n" + processMaxLength(rawTableData[i]['column_type']));
+	}
+
 	// creating the first data cell which includes label.
 	let fieldName = document.createElement('td');
 	fieldName.className = 'field-name';
+
 	let headerFieldName = document.createElement('p');
 	headerFieldName.innerHTML = rawTableData[i]['column_name'];
 	fieldName.appendChild(headerFieldName);
@@ -173,6 +145,11 @@ function generateGridBody_helper(noOfFields, rawTableData, table, numRows) {
 					inputField.className = "data-input-fields";
 					inputField.id = "data-input-field-" + rawTableData[j]['column_name'] + '-' + i;
 
+					inputField.onClick = function() {
+
+						// will create the operation/toolbox section
+					}
+
 					inputField.onkeydown = function() {
 
 						// Need to plug validations.
@@ -225,6 +202,10 @@ function processColDataType (colType) {
 		break;
 		case 'longtext':
 			noteAboutType = "Both Numbers and String allowed!";
+		break;
+		case 'datetime':
+			// Need to generate auto data with current datetime data.
+			noteAboutType = "Only date formats allowed";
 		break;
 		default:
 			noteAboutType = "Some issue here!";
